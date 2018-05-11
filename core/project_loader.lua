@@ -18,28 +18,25 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Table = require "scripts.helpers.table"
-local Project = require "scripts.helpers.project"
+local Loader = require "helpers.loader"
+local Table = require "helpers.table"
+local Project = require "helpers.project"
 
-local ProjectLoader = {projects = {}}
+local ProjectLoader = Loader:new()
+ProjectLoader.id = "ProjectLoader"
+ProjectLoader.__index = ProjectLoader
 
-function ProjectLoader:loadProjects()
-    local files = os.matchfiles("scripts/projects/*.lua")
-    for key,file in pairs(files) do
-        local name = string.gsub(string.sub(file, 1, -5), '/', '.')
-        local f = require(name)
-        if not f then
-            print("Error while loading "..file)
-        else
-            ProjectLoader.projects[string.lower(f:getName())] = f
-        end
+function ProjectLoader:new(obj)
+    if(obj) then
+        assert(type(obj) == "userdata" and obj.id == "ProjectLoader", "ProjectLoader:new expects a prototype of ProjectLoader.")
     end
-end
 
-function ProjectLoader:process()
-    for key,proj in pairs(ProjectLoader.projects) do
-        ProjectLoader:processProject(proj)
-    end
+    setmetatable(this, ProjectLoader)
+    self.__index = self
+
+    this.setPattern(Project:new())
+
+    return this
 end
 
 function ProjectLoader:processProject(proj)
@@ -98,8 +95,8 @@ function ProjectLoader:GetDependencies(proj)
     tmpDep = Table.append(tmpDep, proj:getDependencies())
 
     for key,dependency in pairs(proj:getDependencies()) do
-        if Table.hasKey(ProjectLoader.projects, dependency) == true then
-            local subdependencies = ProjectLoader:GetDependencies(ProjectLoader.projects[dependency])
+        if Table.hasKey(self._data, dependency) == true then
+            local subdependencies = ProjectLoader:GetDependencies(self._data[dependency])
             for subkey,subdependency in pairs(subdependencies) do
                 if not Table.hasValue(tmpDep, subdependency) then
                     table.insert(tmpDep, subdependency)

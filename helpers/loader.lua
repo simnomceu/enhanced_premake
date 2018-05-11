@@ -27,11 +27,63 @@ function Loader:new(obj)
     end
 
     local this = obj or {
+        _pattern = {},
+        _dataPath = "",
+        _data = {},
     }
     setmetatable(this, Loader)
     self.__index = self
 
     return this
+end
+
+function Loader:setPattern(pattern)
+    assert(type(name) == "userdata", "Loader:setPattern expects an object parameter.")
+    self._pattern = pattern
+end
+
+function Loader:getPattern()
+    return self._pattern
+end
+
+function Loader:setDataPath(path)
+    assert(type(name) == "string", "Loader:setDataPath expects a string parameter.")
+    self._dataPath = path
+end
+
+function Loader:getDataPath()
+    return self._dataPath
+end
+
+function Loader:addData(key, data)
+    assert(type(data) == type(self._pattern), "Loader:addData expects an object parameter following the data pattern set previously.")
+    Loader._data[key] = data
+end
+
+function Loader:getData()
+    return self._data
+end
+
+function Loader:loadAll()
+    local files = os.matchfiles(self._dataPath.."/*.lua")
+    for key,file in pairs(files) do
+        local name = string.gsub(string.sub(file, 1, -5), '/', '.')
+        local f = require(name)
+        if not f then
+            print("Error while loading "..file)
+        else
+            Loader._data[string.lower(f:getName())] = f
+        end
+    end
+end
+
+function Loader:processAll()
+    for key,it in pairs(self._data) do
+        self:process(it)
+    end
+end
+
+function Loader:process()
 end
 
 return Loader

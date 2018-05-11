@@ -18,7 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Option = require "scripts.helpers.option"
+local Option = require "helpers.option"
 
 local OptionLoader = {options = {}}
 

@@ -21,6 +21,7 @@
 return {
     "_preload.lua",
     "helpers.dependency.lua",
+    "helpers.loader.lua",
     "helpers.option.lua",
     "helpers.platform_specific.lua",
     "helpers.project.lua",

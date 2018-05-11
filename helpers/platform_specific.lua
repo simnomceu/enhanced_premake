@@ -18,7 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Table = require "scripts.helpers.table"
+local Table = require "helpers.table"
 
 local PlatformSpecific = { id = "PlatformSpecific"}
 PlatformSpecific.__index = PlatformSpecific
