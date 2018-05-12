@@ -20,11 +20,12 @@
 
 return {
     "_preload.lua",
-    "helpers.dependency.lua",
-    "helpers.loader.lua",
-    "helpers.option.lua",
-    "helpers.platform_specific.lua",
-    "helpers.project.lua",
-    "helpers.solutions.lua",
-    "helpers.table.lua",
+    "enhanced_premake.lua",
+    "helpers/dependency.lua",
+    "helpers/file_loader.lua",
+    "helpers/option.lua",
+    "helpers/platform_specific.lua",
+    "helpers/project.lua",
+    "helpers/solution.lua",
+    "helpers/table.lua",
 }

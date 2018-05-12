@@ -18,13 +18,34 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local SolutionBuilder = {}
+local Loader = require "helpers/file_loader.lua"
+local Solution = require "helpers.solution"
 
-function SolutionBuilder.build()
-    workspace "eROMA"
+local SolutionBuilder = { id = "SolutionBuilder" }
+SolutionBuilder.__index = SolutionBuilder
+
+function SolutionBuilder:new(obj)
+    if(obj) then
+        assert(type(obj) == "userdata" and obj.id == "SolutionBuilder", "SolutionBuilder:new expects a prototype of SolutionBuilder.")
+    end
+
+    local this = obj or {
+    }
+    setmetatable(this, SolutionBuilder)
+    self.__index = self
+
+    return this
+end
+
+function SolutionBuilder:build(path)
+    local loader = FileLoader:new()
+    local obj = loader:load(path)
+
+    workspace(obj:getName())
         location("./" .. _ACTION)
-        includedirs { "../extlibs/EdenCraft/extlibs/OpenGL-Registry/api", "../extlibs/EdenCraft/include", "../include", "../extlibs" }
-        libdirs { "../extlibs/EdenCraft/bin/%{cfg.system}/%{cfg.buildcfg}/" }
+        includedirs { "../include" }
+        includedirs(obj:getHeaderDir())
+        libdirs(obj:getLibraryDir())
         configurations {"Debug", "Release"}
         platforms {"x86", "x64"}
     	warnings 'Extra'
@@ -43,10 +64,6 @@ function SolutionBuilder.build()
         filter {"action:gmake"}
             buildoptions {"-pedantic"}
 
-        filter {"action:vs*", "platforms:x86"}
-
-        filter {"action:vs*", "platforms:x64"}
-
         filter {}
 
         filter {"configurations:Debug"}
@@ -60,6 +77,11 @@ function SolutionBuilder.build()
             warnings "Off"
 
         filter {}
+
+        local projectBuilder = projectBuilder:new()
+        for key,value in pairs(loader:getFilesFrom(obj:getProjectDir())) do
+            projectBuilder:process(value)
+        end
 end
 
 return SolutionBuilder

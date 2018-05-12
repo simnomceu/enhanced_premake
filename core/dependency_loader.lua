@@ -18,32 +18,29 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+local Loader = require "helpers.loader"
 local Dependency = require "helpers.dependency"
 
-local DependencyLoader = {dependencies = {}}
+local DependencyLoader = Loader:new()
+DependencyLoader.id = "DependencyLoader"
+DependencyLoader.__index = DependencyLoader
 
-function DependencyLoader:loadDependencies()
-    local files = os.matchfiles("scripts/dependencies/*.lua")
-    for key,file in pairs(files) do
-        local name = string.gsub(string.sub(file, 1, -5), '/', '.')
-        local f = require(name)
-        if not f then
-            print("Error while loading "..file)
-        else
-            DependencyLoader.dependencies[string.lower(f:getName())] = f
-        end
+function DependencyLoader:new(obj)
+    if(obj) then
+        assert(type(obj) == "userdata" and obj.id == "DependencyLoader", "DependencyLoader:new expects a prototype of DependencyLoader.")
     end
+
+    setmetatable(this, DependencyLoader)
+    self.__index = self
+
+    this.setPattern(Dependency:new())
+
+    return this
 end
 
-function DependencyLoader:process()
-    for key,proj in pairs(DependencyLoader.dependencies) do
-        DependencyLoader:processDependency(proj)
-    end
-end
-
-function DependencyLoader:processDependency(dependency)
-    dofile(dependency:getPathToScript())
-    libdirs{ dependecy.getPathToLib() }
+function DependencyLoader:process(obj)
+    dofile(obj:getPathToScript())
+    libdirs{ obj:getPathToLib() }
 end
 
 

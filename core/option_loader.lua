@@ -18,42 +18,47 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+local Loader = require "helpers.loader"
 local Option = require "helpers.option"
 
-local OptionLoader = {options = {}}
+local OptionLoader = Loader:new()
+OptionLoader.id = "OptionLoader"
+OptionLoader.__index = OptionLoader
 
-function OptionLoader:loadOptions()
-    local files = os.matchfiles("scripts/options/*.lua")
-    for key,file in pairs(files) do
-        local name = string.gsub(string.sub(file, 1, -5), '/', '.')
-        local f = require(name)
-        if not f then
-            print("Error while loading "..file)
-        else
-            OptionLoader:processOption(f)
-        end
+function OptionLoader:new(obj)
+    if(obj) then
+        assert(type(obj) == "userdata" and obj.id == "OptionLoader", "OptionLoader:new expects a prototype of OptionLoader.")
     end
+
+    setmetatable(this, OptionLoader)
+    self.__index = self
+
+    this.setPattern(Option:new())
+
+    return this
 end
 
-function OptionLoader:processOption(option)
-    local opt = {
-        trigger = option:getTrigger(),
-        description = option:getDescription(),
+function OptionLoader:process(obj)
+    assert(type(obj) == "userdata" and obj.id == "Option", "OptionLoader:process expects a prototype of Option.")
+
+    local option = {
+        trigger = obj:getTrigger(),
+        description = obj:getDescription(),
     }
 
-    if option:getValue() ~= "" then
-        opt.value = option:getValue()
+    if obj:getValue() ~= "" then
+        option.value = obj:getValue()
     end
 
-    if option:getDefault() ~= "" then
-        opt.value = option:getDefault()
+    if obj:getDefault() ~= "" then
+        option.value = obj:getDefault()
     end
 
-    if option:getAllowed() ~= {} then
-        opt.allowed = option:getAllowed()
+    if obj:getAllowed() ~= {} then
+        option.allowed = obj:getAllowed()
     end
 
-    newoption(opt)
+    newoption(option)
 end
 
 

@@ -39,11 +39,13 @@ function ProjectLoader:new(obj)
     return this
 end
 
-function ProjectLoader:processProject(proj)
-    local includePath, srcPath
-    local projectName = string.lower(proj:getName())
+function ProjectLoader:process(obj)
+    assert(type(obj) == "userdata" and obj.id == "Project", "ProjectLoader:process expects a prototype of Project.")
 
-    if proj:getType() == "Lib" then
+    local includePath, srcPath
+    local projectName = string.lower(obj:getName())
+
+    if obj:getType() == "Lib" then
         includePath = "../include/"..projectName
         srcPath = "../src/"..projectName
     elseif proj:getType() == "ConsoleApp" then
@@ -52,18 +54,18 @@ function ProjectLoader:processProject(proj)
 	else
 		includePath = "../"..projectName
 		srcPath = "../"..projectName
-		proj:setType("ConsoleApp")
+		obj:setType("ConsoleApp")
     end
 
-    project(proj:getName())
-        if proj:getType() == "Lib" then
+    project(obj:getName())
+        if obj:getType() == "Lib" then
             if _OPTIONS["libs"] == "static" then
                 kind "StaticLib"
             elseif _OPTIONS["libs"] == "shared" then
                 kind "SharedLib"
             end
         else
-            kind(proj:getType())
+            kind(obj:getType())
         end
         location("./" .. _ACTION)
         objdir "../obj/%{cfg.system}/%{cfg.buildcfg}"
@@ -84,10 +86,10 @@ function ProjectLoader:processProject(proj)
 			flags {"ExcludeFromBuild"}
 		filter {}
 
-        links(ProjectLoader:GetDependencies(proj))
+        links(ProjectLoader:GetDependencies(obj))
 
-        linkoptions { proj:getLinkOptions() }
-        defines { proj:getPreprocessors() }
+        linkoptions { obj:getLinkOptions() }
+        defines { obj:getPreprocessors() }
 end
 
 function ProjectLoader:GetDependencies(proj)

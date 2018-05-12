@@ -18,36 +18,15 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Table = require "scripts.helpers.table"
-local PlatformSpecific = require "scripts.helpers.platform_specific"
-local Dependency = require "scripts.helpers.dependency"
-local Project = require "scripts.helpers.project"
--- local Pair, Option = require "scripts.helpers.option"
+local p = premake
 
-local SolutionBuilder = require "scripts.solution_builder"
-local DependencyLoader = require "scripts.dependency_loader"
-local ProjectLoader = require "scripts.project_loader"
---local OptionLoader = require "scripts.option_loader"
+p.modules.enhanced_premake = {}
+p.path = p.path .. ";" .. path.getabsolute(os.getcwd())
+print(premake.path)
 
-print("Load CLI options ...")
---OptionLoader:loadOptions()
-newoption {
-    trigger = "libs",
-    value = "Type",
-    description = "Choose to compile static or shared libraries for the engine",
-    default = "static",
-    allowed = {
-        { "static", "Static libraries" },
-        { "shared", "Shared libraries" }
-    }
-}
+local module = p.modules.enhanced_premake
+module._VERSION = p._VERSION
 
-print("Start building solution ...")
-SolutionBuilder.build()
-print("Start loading dependencies ...")
-DependencyLoader:loadDependencies()
-print("Start loading projects ...")
-ProjectLoader:loadProjects()
-print("Start processing projects ...")
-ProjectLoader:process()
-print("Building solution completed ...")
+include("core/solution_builder.lua")
+
+return module
