@@ -18,7 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Dependency = { id = "Dependency" }
+Dependency = { id = "Dependency" }
 Dependency.__index = Dependency
 
 function Dependency:new(obj)
@@ -63,5 +63,3 @@ end
 function Dependency:getPathToLib()
     return self._pathToLib
 end
-
-return Dependency

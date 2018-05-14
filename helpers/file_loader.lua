@@ -18,7 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local FileLoader = { id = "FileLoader" }
+FileLoader = { id = "FileLoader" }
 FileLoader.__index = FileLoader
 
 function FileLoader:new(obj)
@@ -42,15 +42,15 @@ function FileLoader:getFilesFrom(path)
 end
 
 function FileLoader:load(filename)
-    assert(type(path) == "string", "FileLoader:load expects a string parameter.")
+    assert(type(filename) == "string", "FileLoader:load expects a string parameter.")
     assert(os.isfile(filename), filename.." is not an existing file.")
     local name
-    if string.sub(file, -3) == "lua" then
-        name = string.gsub(string.sub(file, 1, -5), '/', '.')
+    if string.sub(filename, -3) == "lua" then
+        name = string.gsub(string.sub(filename, 1, -5), '/', '.')
     else
-        name = string.gsub(file, '/', '.')
+        name = string.gsub(filename, '/', '.')
     end
     local resource = require(name)
-    assert(type(resource:getName) == "function", name.." does not contain any resource.")
+    assert(type(resource._name) == "string", name.." does not contain any resource.")
     return resource
 end

@@ -18,7 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Pair = { id = "Pair" }
+Pair = { id = "Pair" }
 Pair.__index = Pair
 
 function Pair:new(obj)
@@ -49,7 +49,7 @@ end
 
 
 
-local Option = { id = "Option" }
+Option = { id = "Option" }
 Option.__index = Option
 
 function Option:new(obj)
@@ -58,6 +58,7 @@ function Option:new(obj)
     end
 
     local this = obj or {
+        _name = "",
         _trigger = "",
         _value = "",
         _description = "",
@@ -68,6 +69,15 @@ function Option:new(obj)
     self.__index = self
 
     return this
+end
+
+function Option:setName(name)
+    assert(type(name) == "string", "Option:setName expects a string parameter.")
+    self._name = name
+end
+
+function Option:getName()
+    return self._name
 end
 
 function Option:setTrigger(trigger)
@@ -81,7 +91,7 @@ end
 
 function Option:setValue(value)
     assert(type(value) == "string", "Option:setValue expects a string parameter.")
-    self._trigger = trigger
+    self._value = trigger
 end
 
 function Option:getValue()
@@ -107,12 +117,10 @@ function Option:getDefault()
 end
 
 function Option:addAllowed(pair)
-    assert(type(default) == "userdata" and pair.id == "Pair", "Option:setDefault expects a Pair parameter.")
-    table.insert(self._allowed, pair)
+    assert(type(pair) == "table" and pair.id == "Pair", "Option:addAllowed expects a Pair parameter.")
+    self._allowed = Table.insertPair(self._allowed, pair)
 end
 
 function Option:getAllowed()
     return self._allowed
 end
-
-return Pair, Option

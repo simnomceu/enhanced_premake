@@ -18,10 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Loader = require "helpers/file_loader.lua"
-local Solution = require "helpers.solution"
-
-local SolutionBuilder = { id = "SolutionBuilder" }
+SolutionBuilder = { id = "SolutionBuilder" }
 SolutionBuilder.__index = SolutionBuilder
 
 function SolutionBuilder:new(obj)
@@ -41,47 +38,55 @@ function SolutionBuilder:build(path)
     local loader = FileLoader:new()
     local obj = loader:load(path)
 
-    workspace(obj:getName())
-        location("./" .. _ACTION)
-        includedirs { "../include" }
-        includedirs(obj:getHeaderDir())
-        libdirs(obj:getLibraryDir())
-        configurations {"Debug", "Release"}
-        platforms {"x86", "x64"}
-    	warnings 'Extra'
-        language "C++"
-    	cppdialect 'C++17'
+    local optionLoader = OptionLoader:new()
+    for key,value in pairs(loader:getFilesFrom(obj:getOptionsDir())) do
+        optionLoader:process(value)
+    end
 
-        filter {"platforms:x86"}
-            architecture "x86"
+    if (_ACTION) then
+        workspace(obj:getName())
+            location("./" .. _ACTION)
+            includedirs { "../include" }
+            includedirs(obj:getHeaderDir())
+            libdirs(obj:getLibraryDir())
+            configurations {"Debug", "Release"}
+            platforms {"x86", "x64"}
+        	warnings 'Extra'
+            language "C++"
+        	cppdialect 'C++17'
 
-        filter {"platforms:x64"}
-            architecture "x86_64"
+            filter {"platforms:x86"}
+                architecture "x86"
 
-        filter {"action:vs*"}
-            buildoptions {"/MP"}
+            filter {"platforms:x64"}
+                architecture "x86_64"
 
-        filter {"action:gmake"}
-            buildoptions {"-pedantic"}
+            filter {"action:vs*"}
+                buildoptions {"/MP"}
 
-        filter {}
+            filter {"action:gmake"}
+                buildoptions {"-pedantic"}
 
-        filter {"configurations:Debug"}
-            symbols "Default"
-            warnings "Extra"
-            flags { "FatalWarnings" }
+            filter {}
 
-        filter {"configurations:Release"}
-    		optimize "On"
-    		symbols "Off"
-            warnings "Off"
+            filter {"configurations:Debug"}
+                symbols "Default"
+                warnings "Extra"
+                flags { "FatalWarnings" }
 
-        filter {}
+            filter {"configurations:Release"}
+        		optimize "On"
+        		symbols "Off"
+                warnings "Off"
 
-        local projectBuilder = projectBuilder:new()
-        for key,value in pairs(loader:getFilesFrom(obj:getProjectDir())) do
-            projectBuilder:process(value)
-        end
+            filter {}
+
+            local projectLoader = ProjectLoader:new()
+            for key,value in pairs(loader:getFilesFrom(obj:getProjectsDir())) do
+                projectLoader:load(value)
+            end
+            for key,value in pairs(loader:getFilesFrom(obj:getProjectsDir())) do
+                projectLoader:process(value)
+            end
+    end
 end
-
-return SolutionBuilder

@@ -18,11 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Loader = require "helpers.loader"
-local Dependency = require "helpers.dependency"
-
-local DependencyLoader = Loader:new()
-DependencyLoader.id = "DependencyLoader"
+DependencyLoader = { id = "DependencyLoader" }
 DependencyLoader.__index = DependencyLoader
 
 function DependencyLoader:new(obj)
@@ -30,10 +26,10 @@ function DependencyLoader:new(obj)
         assert(type(obj) == "userdata" and obj.id == "DependencyLoader", "DependencyLoader:new expects a prototype of DependencyLoader.")
     end
 
+    local this = obj or {
+    }
     setmetatable(this, DependencyLoader)
     self.__index = self
-
-    this.setPattern(Dependency:new())
 
     return this
 end
@@ -42,6 +38,3 @@ function DependencyLoader:process(obj)
     dofile(obj:getPathToScript())
     libdirs{ obj:getPathToLib() }
 end
-
-
-return DependencyLoader

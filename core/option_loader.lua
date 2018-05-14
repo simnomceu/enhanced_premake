@@ -18,11 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Loader = require "helpers.loader"
-local Option = require "helpers.option"
-
-local OptionLoader = Loader:new()
-OptionLoader.id = "OptionLoader"
+OptionLoader = { id = "OptionLoader" }
 OptionLoader.__index = OptionLoader
 
 function OptionLoader:new(obj)
@@ -30,16 +26,20 @@ function OptionLoader:new(obj)
         assert(type(obj) == "userdata" and obj.id == "OptionLoader", "OptionLoader:new expects a prototype of OptionLoader.")
     end
 
+
+    local this = obj or {
+    }
     setmetatable(this, OptionLoader)
     self.__index = self
-
-    this.setPattern(Option:new())
 
     return this
 end
 
-function OptionLoader:process(obj)
-    assert(type(obj) == "userdata" and obj.id == "Option", "OptionLoader:process expects a prototype of Option.")
+function OptionLoader:process(path)
+    assert(type(path) == "string", "OptionLoader:process expects a string parameter.")
+
+    local loader = FileLoader:new()
+    local obj = loader:load(path)
 
     local option = {
         trigger = obj:getTrigger(),
@@ -51,7 +51,7 @@ function OptionLoader:process(obj)
     end
 
     if obj:getDefault() ~= "" then
-        option.value = obj:getDefault()
+        option.default = obj:getDefault()
     end
 
     if obj:getAllowed() ~= {} then
@@ -60,6 +60,3 @@ function OptionLoader:process(obj)
 
     newoption(option)
 end
-
-
-return OptionLoader

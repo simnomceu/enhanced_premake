@@ -18,9 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Table = require "helpers.table"
-
-local Solution = { id = "Solution"}
+Solution = { id = "Solution"}
 Solution.__index = Solution
 
 function Solution:new(obj)
@@ -32,7 +30,8 @@ function Solution:new(obj)
         _name = "",
         _headerDir = {},
         _libraryDir = {},
-        _projectDir = "",
+        _projectsDir = "",
+        _optionsDir = ""
     }
     setmetatable(this, Solution)
     self.__index = self
@@ -50,7 +49,7 @@ function Solution:getName()
 end
 
 function Solution:addHeaderDir(dir)
-    assert(type(dir) == "string", "Solution:addHeaderDir expects a string parameter.")
+    assert(type(dir) == "table", "Solution:addHeaderDir expects a table parameter.")
     self._headerDir = Table.append(self._headerDir, dir)
 end
 
@@ -59,7 +58,7 @@ function Solution:getHeaderDir()
 end
 
 function Solution:addLibraryDir(dir)
-    assert(type(dir) == "string", "Solution:addLibraryDir expects a string parameter.")
+    assert(type(dir) == "table", "Solution:addLibraryDir expects a table parameter.")
     self._libraryDir = Table.append(self._libraryDir, dir)
 end
 
@@ -67,13 +66,20 @@ function Solution:getLibraryDir()
     return self._libraryDir
 end
 
-function Solution:setProjectDir(path)
-    assert(type(path) == "string", "Solution:setProjectDir expects a string parameter.")
-    self._projectDir = path
+function Solution:setProjectsDir(path)
+    assert(type(path) == "string", "Solution:setProjectsDir expects a string parameter.")
+    self._projectsDir = path
 end
 
-function Solution:getProjectDir()
-    return self._projectDir
+function Solution:getProjectsDir()
+    return self._projectsDir
 end
 
-return Solution
+function Solution:setOptionsDir(path)
+    assert(type(path) == "string", "Solution:setOptionsDir expects a string parameter.")
+    self._optionsDir = path
+end
+
+function Solution:getOptionsDir()
+    return self._optionsDir
+end

@@ -18,10 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Table = require "helpers.table"
-local PlatformSpecific = require "helpers.platform_specific"
-
-local Project = { id = "Project"}
+Project = { id = "Project"}
 Project.__index = Project
 
 function Project:new(obj)
@@ -127,5 +124,3 @@ end
 function Project:getPreprocessors()
     return self._preprocessors:getAll()
 end
-
-return Project

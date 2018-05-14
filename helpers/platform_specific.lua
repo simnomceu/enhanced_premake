@@ -18,9 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Table = require "helpers.table"
-
-local PlatformSpecific = { id = "PlatformSpecific"}
+PlatformSpecific = { id = "PlatformSpecific"}
 PlatformSpecific.__index = PlatformSpecific
 
 function PlatformSpecific:new(obj)
@@ -71,5 +69,3 @@ function PlatformSpecific:getAll()
     end
     return result
 end
-
-return PlatformSpecific

@@ -22,11 +22,21 @@ local p = premake
 
 p.modules.enhanced_premake = {}
 p.path = p.path .. ";" .. path.getabsolute(os.getcwd())
-print(premake.path)
 
 local module = p.modules.enhanced_premake
 module._VERSION = p._VERSION
 
+include("helpers/dependency.lua")
+include("helpers/file_loader.lua")
+include("helpers/option.lua")
+include("helpers/platform_specific.lua")
+include("helpers/project.lua")
+include("helpers/solution.lua")
+include("helpers/table.lua")
+
+include("core/dependency_loader.lua")
+include("core/option_loader.lua")
+include("core/project_loader.lua")
 include("core/solution_builder.lua")
 
 return module

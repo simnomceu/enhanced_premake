@@ -18,12 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Loader = require "helpers.loader"
-local Table = require "helpers.table"
-local Project = require "helpers.project"
-
-local ProjectLoader = Loader:new()
-ProjectLoader.id = "ProjectLoader"
+ProjectLoader = { id = "ProjectLoader" }
 ProjectLoader.__index = ProjectLoader
 
 function ProjectLoader:new(obj)
@@ -31,16 +26,26 @@ function ProjectLoader:new(obj)
         assert(type(obj) == "userdata" and obj.id == "ProjectLoader", "ProjectLoader:new expects a prototype of ProjectLoader.")
     end
 
+    local this = obj or {
+        _data = {}
+    }
     setmetatable(this, ProjectLoader)
     self.__index = self
-
-    this.setPattern(Project:new())
 
     return this
 end
 
-function ProjectLoader:process(obj)
-    assert(type(obj) == "userdata" and obj.id == "Project", "ProjectLoader:process expects a prototype of Project.")
+function ProjectLoader:load(path)
+    assert(type(path) == "string", "ProjectLoader:process expects a string parameter.")
+
+    local loader = FileLoader:new()
+    self._data[path] = loader:load(path)
+end
+
+function ProjectLoader:process(path)
+    assert(type(path) == "string", "ProjectLoader:process expects a string parameter.")
+
+    local obj = self._data[path]
 
     local includePath, srcPath
     local projectName = string.lower(obj:getName())
@@ -48,7 +53,7 @@ function ProjectLoader:process(obj)
     if obj:getType() == "Lib" then
         includePath = "../include/"..projectName
         srcPath = "../src/"..projectName
-    elseif proj:getType() == "ConsoleApp" then
+    elseif obj:getType() == "ConsoleApp" then
         includePath = "../examples/"..projectName
         srcPath = "../examples/"..projectName
 	else
@@ -59,10 +64,12 @@ function ProjectLoader:process(obj)
 
     project(obj:getName())
         if obj:getType() == "Lib" then
-            if _OPTIONS["libs"] == "static" then
+            if _OPTIONS["libs"] == "Static" then
                 kind "StaticLib"
-            elseif _OPTIONS["libs"] == "shared" then
+            elseif _OPTIONS["libs"] == "Shared" then
                 kind "SharedLib"
+            else
+                kind "StaticLib"
             end
         else
             kind(obj:getType())
@@ -86,7 +93,7 @@ function ProjectLoader:process(obj)
 			flags {"ExcludeFromBuild"}
 		filter {}
 
-        links(ProjectLoader:GetDependencies(obj))
+        links(self:GetDependencies(obj))
 
         linkoptions { obj:getLinkOptions() }
         defines { obj:getPreprocessors() }
@@ -109,5 +116,3 @@ function ProjectLoader:GetDependencies(proj)
 
     return tmpDep
 end
-
-return ProjectLoader

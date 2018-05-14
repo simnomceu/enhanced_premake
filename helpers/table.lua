@@ -18,7 +18,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-local Table = {}
+Table = {}
 
 function Table.hasKey(tab, key)
     assert(type(tab) == "table", "Table.hasKey expects a table as first parameter.")
@@ -54,6 +54,16 @@ function Table.append (table1, table2)
     return result
 end
 
+function Table.insertPair(table1, pair)
+    assert(type(table) == "table", "Table.append expects a table as first parameter.")
+    assert(type(pair) == "table" and pair.id == "Pair", "Table.append expects a table as second parameter.")
+    result = table1
+
+    table.insert(result, {pair._value, pair._description})
+
+    return result
+end
+
 function Table.size(tab)
     assert(type(tab) == "table", "Table.size expects a table parameter.")
     local count = 0
@@ -75,5 +85,3 @@ function Table.print(tab)
         end
     end
 end
-
-return Table
