@@ -16,7 +16,7 @@ The solution built is only for C++17 project, with some specific settings. Have 
 
 ## Using EnhancedPremake
 ### Including EnhancedPremake to your solution
-There is two ways to include it to your solution: the basic one and the embedded one. For the embedded including, a documentation from premake is available [HERE]{https://github.com/premake/premake-core/wiki/Embedding-Modules}.
+There is two ways to include it to your solution: the basic one and the embedded one. For the embedded including, a documentation from premake is available [HERE](https://github.com/premake/premake-core/wiki/Embedding-Modules).
 For a more classic including, you can just put the EnhancedProject in a folder close to the premake5 binary. For example, for windows it could look like:
 ```
 build\
@@ -55,7 +55,7 @@ Paths to those configuration files has to be set in the solution file.
 
 ## Contributing to EnhancedPremake
 
-Bugs can be reported on the Framagit issue tracker here: [(https://img.shields.io/badge/Framagit-Open%20an%20issue-blue.svg)]{https://framagit.org/simnomce_u/enhanced_premake/issues}
+Bugs can be reported on the Framagit issue tracker here: [(https://img.shields.io/badge/Framagit-Open%20an%20issue-blue.svg)](https://framagit.org/simnomce_u/enhanced_premake/issues)
 
 ## Authors
 * IsilinBN
