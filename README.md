@@ -55,7 +55,7 @@ Paths to those configuration files has to be set in the solution file.
 
 ## Contributing to EnhancedPremake
 
-Bugs can be reported on the Framagit issue tracker here: [(https://img.shields.io/badge/Framagit-Open%20an%20issue-blue.svg)](https://framagit.org/simnomce_u/enhanced_premake/issues)
+Bugs can be reported on the Framagit issue tracker here: [!(https://img.shields.io/badge/Framagit-Open%20an%20issue-blue.svg)](https://framagit.org/simnomce_u/enhanced_premake/issues)
 
 ## Authors
 * IsilinBN
