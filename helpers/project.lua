@@ -108,7 +108,7 @@ end
 
 function Project:addPreprocessors(target, preprocessors)
     assert(type(target) == "string", "Project:addPreprocessors expects a string parameter as first parameter.")
-    assert(target == "Windows" or target == "Linux" or target == "MacOSX" or target == "Common", "linkOption can only be for 'Common', 'Windows', 'Linux', or 'MacOSX'.")
+    assert(target == "Windows" or target == "Linux" or target == "MacOSX" or target == "Common", "preprocessors can only be for 'Common', 'Windows', 'Linux', or 'MacOSX'.")
     assert(type(preprocessors) == "table", "Project:addPreprocessors expects a table parameter as second parameter.")
     if target == "Common" then
         self._preprocessors:addToCommon(preprocessors)

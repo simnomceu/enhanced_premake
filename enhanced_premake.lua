@@ -33,6 +33,7 @@ module.load = function(path)
     solutionBuilder:build(path)
 end
 
+include("helpers/configuration_specific.lua")
 include("helpers/dependency.lua")
 include("helpers/file_loader.lua")
 include("helpers/option.lua")

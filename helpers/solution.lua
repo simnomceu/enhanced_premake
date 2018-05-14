@@ -33,6 +33,7 @@ function Solution:new(obj)
         _projectsDir = "",
         _optionsDir = "",
         _dependenciesDirs = {},
+        _preprocessors = ConfigurationSpecific:new(),
     }
     setmetatable(this, Solution)
     self.__index = self
@@ -92,4 +93,15 @@ end
 
 function Solution:getDependenciesDirs()
     return self._dependenciesDirs
+end
+
+function Solution:addPreprocessorsIn(entries, table1)
+    assert(type(entries) == "table", "Project:addPreprocessorsIn expects a table as first parameter.")
+    assert(type(table1) == "string", "Project:addPreprocessorsIn expects a string as second parameter.")
+    self._preprocessors:addEntriesIn(entries, table1)
+end
+
+function Solution:getPreprocessorsFrom(table1)
+    assert(type(table1) == "string", "Project:getPreprocessorsFrom expects a string parameter")
+    return self._preprocessors:getEntriesFrom(table1)
 end

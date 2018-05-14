@@ -57,9 +57,11 @@ function SolutionBuilder:build(path)
 
             filter {"platforms:x86"}
                 architecture "x86"
+                defines { obj:getPreprocessorsFrom("x86")}
 
             filter {"platforms:x64"}
                 architecture "x86_64"
+                defines { obj:getPreprocessorsFrom("x64")}
 
             filter {"action:vs*"}
                 buildoptions {"/MP"}
@@ -73,11 +75,13 @@ function SolutionBuilder:build(path)
                 symbols "Default"
                 warnings "Extra"
                 flags { "FatalWarnings" }
+                defines { obj:getPreprocessorsFrom("Debug")}
 
             filter {"configurations:Release"}
         		optimize "On"
         		symbols "Off"
                 warnings "Off"
+                defines { obj:getPreprocessorsFrom("Release")}
 
             filter {}
 

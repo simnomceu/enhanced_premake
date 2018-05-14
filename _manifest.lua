@@ -21,6 +21,7 @@
 return {
     "_preload.lua",
     "enhanced_premake.lua",
+    "helpers/configuration_specific.lua",
     "helpers/dependency.lua",
     "helpers/file_loader.lua",
     "helpers/option.lua",
