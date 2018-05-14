@@ -1,7 +1,7 @@
 # EnhancedPremake
 
 ## Introduction
-EnhancedPremake is a module for [Premake5]{https://premake.github.io/}. It create a solution with the following folder-tree:
+**EnhancedPremake** is a module for [Premake5](https://premake.github.io/). It create a solution with the following folder-tree:
 ```
 root\
 	|- build\
@@ -16,8 +16,8 @@ The solution built is only for C++17 project, with some specific settings. Have 
 
 ## Using EnhancedPremake
 ### Including EnhancedPremake to your solution
-There is two ways to include it to your solution: the basic one and the embedded one. For the embedded including, a documentation from premake is available [HERE](https://github.com/premake/premake-core/wiki/Embedding-Modules).
-For a more classic including, you can just put the EnhancedProject in a folder close to the premake5 binary. For example, for windows it could look like:
+There is two ways to include it to your solution: the basic one and the embedded one. For the embedded including, a documentation from Premake5 is available [HERE](https://github.com/premake/premake-core/wiki/Embedding-Modules).
+For a more classic including, you can just put the EnhancedPremake module in a folder, close to the Premake5 binary. For example, for Windows it could look like:
 ```
 build\
 	|- modules\
@@ -26,7 +26,7 @@ build\
 	|- premake5.exe
 ```
 ### Creating a premake solution
-The basic code to create a premake solution using EnhancedPremake is the following:
+The basic code to create a Premake5 solution using EnhancedPremake is the following:
 ```lua
 #!lua
 
