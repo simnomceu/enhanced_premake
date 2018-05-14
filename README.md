@@ -1,9 +1,57 @@
 # EnhancedPremake
 
 ## Introduction
-EnhancedPremake is a module for [Premake5]{https://premake.github.io/}
+EnhancedPremake is a module for [Premake5]{https://premake.github.io/}. It create a solution with the following folder-tree:
+```
+root\
+	|- build\
+    	|- premake5.lua
+        |- ...
+	|- include\
+	|- src\
+	|- bin\
+	|- obj\
+```
+The solution built is only for C++17 project, with some specific settings. Have a look into the code to see what are exactly these settings.
 
 ## Using EnhancedPremake
+### Including EnhancedPremake to your solution
+There is two ways to include it to your solution: the basic one and the embedded one. For the embedded including, a documentation from premake is available [HERE]{https://github.com/premake/premake-core/wiki/Embedding-Modules}.
+For a more classic including, you can just put the EnhancedProject in a folder close to the premake5 binary. For example, for windows it could look like:
+```
+build\
+	|- modules\
+		|- enhanced_premake\
+    		|- ....
+	|- premake5.exe
+```
+### Creating a premake solution
+The basic code to create a premake solution using EnhancedPremake is the following:
+```lua
+#!lua
+
+-- premake5.lua
+local EnhancedPremake = require "modules.enhanced_premake.enhanced_premake"
+
+EnhancedPremake.load("<my_solution>.lua")
+```
+
+Then, the configuration file that describes your solution should inherit from the solution class:
+```lua
+#!lua
+
+-- v.lua
+
+local resource = Solution:new()
+
+resource:setName("my_solution")
+....
+
+return resource
+```
+
+Projects, options, or external dependencies are working exactly like the solution, using respectively, Project, Option, and Dependency classes.
+Paths to those configuration files has to be set in the solution file.
 
 ## Contributing to EnhancedPremake
 
