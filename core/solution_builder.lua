@@ -82,10 +82,16 @@ function SolutionBuilder:build(path)
             filter {}
 
             local projectLoader = ProjectLoader:new()
-            for key,value in pairs(loader:getFilesFrom(obj:getProjectsDir())) do
-                projectLoader:load(value)
+            for _,dir in pairs(obj:getDependenciesDirs()) do
+                for key,value in pairs(loader:getFilesFrom(dir)) do
+                    projectLoader:load(value, true)
+                end
             end
+            local names = {}
             for key,value in pairs(loader:getFilesFrom(obj:getProjectsDir())) do
+                table.insert(names, projectLoader:load(value, false))
+            end
+            for key,value in pairs(names) do
                 projectLoader:process(value)
             end
     end

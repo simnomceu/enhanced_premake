@@ -27,7 +27,8 @@ function ProjectLoader:new(obj)
     end
 
     local this = obj or {
-        _data = {}
+        _data = {},
+        _external = {}
     }
     setmetatable(this, ProjectLoader)
     self.__index = self
@@ -35,11 +36,18 @@ function ProjectLoader:new(obj)
     return this
 end
 
-function ProjectLoader:load(path)
+function ProjectLoader:load(path, external)
     assert(type(path) == "string", "ProjectLoader:process expects a string parameter.")
+    assert(type(external) == "boolean", "ProjectLoader:process expects a boolean parameter.")
 
     local loader = FileLoader:new()
-    self._data[path] = loader:load(path)
+    local proj = loader:load(path)
+    if (not external) then
+        self._data[proj:getName()] = proj
+    else
+        self._external[proj:getName()] = proj
+    end
+    return proj:getName()
 end
 
 function ProjectLoader:process(path)
@@ -105,7 +113,14 @@ function ProjectLoader:GetDependencies(proj)
 
     for key,dependency in pairs(proj:getDependencies()) do
         if Table.hasKey(self._data, dependency) == true then
-            local subdependencies = ProjectLoader:GetDependencies(self._data[dependency])
+            local subdependencies = self:GetDependencies(self._data[dependency])
+            for subkey,subdependency in pairs(subdependencies) do
+                if not Table.hasValue(tmpDep, subdependency) then
+                    table.insert(tmpDep, subdependency)
+                end
+            end
+        elseif Table.hasKey(self._external, dependency) == true then
+            local subdependencies = self:GetDependencies(self._external[dependency])
             for subkey,subdependency in pairs(subdependencies) do
                 if not Table.hasValue(tmpDep, subdependency) then
                     table.insert(tmpDep, subdependency)

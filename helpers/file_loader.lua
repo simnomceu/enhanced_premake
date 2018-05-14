@@ -46,9 +46,9 @@ function FileLoader:load(filename)
     assert(os.isfile(filename), filename.." is not an existing file.")
     local name
     if string.sub(filename, -3) == "lua" then
-        name = string.gsub(string.sub(filename, 1, -5), '/', '.')
-    else
-        name = string.gsub(filename, '/', '.')
+        name = string.sub(filename, 1, -5)
+    --else
+    --    name = string.gsub(filename, '/', '.')
     end
     local resource = require(name)
     assert(type(resource._name) == "string", name.." does not contain any resource.")

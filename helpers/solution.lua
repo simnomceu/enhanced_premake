@@ -31,7 +31,8 @@ function Solution:new(obj)
         _headerDir = {},
         _libraryDir = {},
         _projectsDir = "",
-        _optionsDir = ""
+        _optionsDir = "",
+        _dependenciesDirs = {},
     }
     setmetatable(this, Solution)
     self.__index = self
@@ -82,4 +83,13 @@ end
 
 function Solution:getOptionsDir()
     return self._optionsDir
+end
+
+function Solution:addDependenciesDirs(path)
+    assert(type(path) == "table", "Solution:addDependenciesDirs expects a table parameter.")
+    self._dependenciesDirs = Table.append(self._dependenciesDirs, path)
+end
+
+function Solution:getDependenciesDirs()
+    return self._dependenciesDirs
 end
