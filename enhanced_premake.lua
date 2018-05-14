@@ -26,6 +26,13 @@ p.path = p.path .. ";" .. path.getabsolute(os.getcwd())
 local module = p.modules.enhanced_premake
 module._VERSION = p._VERSION
 
+module.load = function(path)
+    assert(type(path) == "string", "EnhancedPremake.load expects a string parameter.")
+
+    local solutionBuilder = SolutionBuilder:new()
+    solutionBuilder:build(path)
+end
+
 include("helpers/dependency.lua")
 include("helpers/file_loader.lua")
 include("helpers/option.lua")
