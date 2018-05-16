@@ -98,5 +98,7 @@ function SolutionBuilder:build(path)
             for key,value in pairs(names) do
                 projectLoader:process(value)
             end
+
+        -- TODO: have to add a project "group" -> https://github.com/premake/premake-core/wiki/group
     end
 end
