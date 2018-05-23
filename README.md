@@ -1,57 +1,12 @@
 # EnhancedPremake
 
 ## Introduction
-**EnhancedPremake** is a module for [Premake5](https://premake.github.io/). It create a solution with the following folder-tree:
-```
-root\
-	|- build\
-    	|- premake5.lua
-        |- ...
-	|- include\
-	|- src\
-	|- bin\
-	|- obj\
-```
+**EnhancedPremake** is a module for [Premake5](https://premake.github.io/).
 The solution built is only for C++17 project, with some specific settings. Have a look into the code to see what are exactly these settings.
 
 ## Using EnhancedPremake
-### Including EnhancedPremake to your solution
-There is two ways to include it to your solution: the basic one and the embedded one. For the embedded including, a documentation from Premake5 is available [HERE](https://github.com/premake/premake-core/wiki/Embedding-Modules).
-For a more classic including, you can just put the EnhancedPremake module in a folder, close to the Premake5 binary. For example, for Windows it could look like:
-```
-build\
-	|- modules\
-		|- enhanced_premake\
-    		|- ....
-	|- premake5.exe
-```
-### Creating a premake solution
-The basic code to create a Premake5 solution using EnhancedPremake is the following:
-```lua
-#!lua
-
--- premake5.lua
-local EnhancedPremake = require "modules.enhanced_premake.enhanced_premake"
-
-EnhancedPremake.load("<my_solution>.lua")
-```
-
-Then, the configuration file that describes your solution should inherit from the solution class:
-```lua
-#!lua
-
--- v.lua
-
-local resource = Solution:new()
-
-resource:setName("my_solution")
-....
-
-return resource
-```
-
-Projects, options, or external dependencies are working exactly like the solution, using respectively, Project, Option, and Dependency classes.
-Paths to those configuration files has to be set in the solution file.
+Using **EnhancePremake** supposes that you already have some basics about Premake5.
+Documentation for EnhancedPremake can be found here: [wiki](https://framagit.org/simnomce_u/enhanced_premake/wikis/home).
 
 ## Contributing to EnhancedPremake
 
@@ -59,6 +14,7 @@ Bugs can be reported on the Framagit issue tracker here: [![Open an issue](https
 
 ## Authors
 * IsilinBN
+* Alcyone
 
 ## Copyright and Licensing
 EnhancedPremake is delivered under the [GNU-GPLv3](https://www.gnu.org/licenses/gpl-3.0.fr.html).
