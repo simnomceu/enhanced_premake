@@ -116,6 +116,7 @@ function ProjectLoader:process(path)
 
         links(self:GetDependencies(obj))
 
+        linkoptions { "-fvisibility=hidden -fvisibility-inlines-hidden"}
         linkoptions { obj:getLinkOptions() }
         defines { obj:getPreprocessors() }
         defines { "ECE_"..projectName.."_BUILD"}
