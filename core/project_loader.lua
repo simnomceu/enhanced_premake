@@ -112,11 +112,13 @@ function ProjectLoader:process(path)
 		filter { "system:macosx", "files:**/x11/** or **/win32/**" }
 			flags {"ExcludeFromBuild"}
 
+        filter { "system:linux" }
+            linkoptions { "-fvisibility=hidden -fvisibility-inlines-hidden"}
+
 		filter {}
 
         links(self:GetDependencies(obj))
 
-        linkoptions { "-fvisibility=hidden -fvisibility-inlines-hidden"}
         linkoptions { obj:getLinkOptions() }
         defines { obj:getPreprocessors() }
         defines { "ECE_"..projectName.."_BUILD"}
