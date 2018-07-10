@@ -72,19 +72,31 @@ function ProjectLoader:process(path)
 
     project(obj:getName())
         if obj:getType() == "Lib" then
-            if _OPTIONS["libs"] == "Static" then
+            filter {"configurations:*Static"}
                 kind "StaticLib"
-            elseif _OPTIONS["libs"] == "Shared" then
+
+            filter {"configurations:*Shared"}
                 kind "SharedLib"
-            else
-                kind "StaticLib"
-            end
+                defines {"ECE_"..projectName.."_SHARED"}
+
+            filter {"configurations:DebugStatic"}
+                targetsuffix("-s-d")
+
+            filter {"configurations:DebugShared"}
+                targetsuffix("-d")
+
+            filter {"configurations:ReleaseStatic"}
+                targetsuffix("-s")
+
+            filter {}
+
+            pic("On")
         else
             kind(obj:getType())
         end
         location("./" .. _ACTION)
-        objdir "../obj/%{cfg.system}/%{cfg.buildcfg}"
-        targetdir "../bin/%{cfg.system}/%{cfg.buildcfg}"
+        objdir "../obj/%{cfg.system}"
+        targetdir "../bin/%{cfg.system}"
         files {
             includePath.."/**.inl",
             includePath.."/**.hpp",
@@ -99,12 +111,14 @@ function ProjectLoader:process(path)
 			flags {"ExcludeFromBuild"}
 		filter { "system:macosx", "files:**/x11/** or **/win32/**" }
 			flags {"ExcludeFromBuild"}
+
 		filter {}
 
         links(self:GetDependencies(obj))
 
         linkoptions { obj:getLinkOptions() }
         defines { obj:getPreprocessors() }
+        defines { "ECE_"..projectName.."_BUILD"}
 end
 
 function ProjectLoader:GetDependencies(proj)

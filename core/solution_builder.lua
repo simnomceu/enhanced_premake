@@ -49,7 +49,7 @@ function SolutionBuilder:build(path)
             includedirs { "../include" }
             includedirs(obj:getHeaderDir())
             libdirs(obj:getLibraryDir())
-            configurations {"Debug", "Release"}
+            configurations {"DebugStatic", "DebugShared", "ReleaseStatic", "ReleaseShared"}
             platforms {"x86", "x64"}
         	warnings 'Extra'
             language "C++"
@@ -71,13 +71,13 @@ function SolutionBuilder:build(path)
 
             filter {}
 
-            filter {"configurations:Debug"}
+            filter {"configurations:Debug*"}
                 symbols "Default"
                 warnings "Extra"
                 flags { "FatalWarnings" }
                 defines { obj:getPreprocessorsFrom("Debug")}
 
-            filter {"configurations:Release"}
+            filter {"configurations:Release*"}
         		optimize "On"
         		symbols "Off"
                 warnings "Off"
