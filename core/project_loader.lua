@@ -102,7 +102,7 @@ function ProjectLoader:process(path)
             includePath.."/**.hpp",
             includePath.."/**.h",
             srcPath.."/**.cpp",
-            srcPath.."/**.c"
+            srcPath.."/**.c",
 			srcPath.."/**.frag",
 			srcPath.."/**.vert",
 			srcPath.."/**.geom",
