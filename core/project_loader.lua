@@ -100,7 +100,9 @@ function ProjectLoader:process(path)
         files {
             includePath.."/**.inl",
             includePath.."/**.hpp",
+            includePath.."/**.h",
             srcPath.."/**.cpp",
+            srcPath.."/**.c"
 			srcPath.."/**.frag",
 			srcPath.."/**.vert",
 			srcPath.."/**.geom",
