@@ -97,6 +97,13 @@ function ProjectLoader:process(path)
         location("./" .. _ACTION)
         objdir "../obj/%{cfg.system}"
         targetdir "../bin/%{cfg.system}"
+
+        filter { "kind:*Lib" }
+            pchheader(obj:getName().."/pch.hpp")
+        filter { "kind:*Lib", "action:vs*" }
+                pchsource(srcPath.."/pch.cpp")
+        filter {}
+
         files {
             includePath.."/**.inl",
             includePath.."/**.hpp",
