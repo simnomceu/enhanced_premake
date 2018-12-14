@@ -127,6 +127,7 @@ function ProjectLoader:process(path)
 		filter {}
 
         links(self:GetDependencies(obj))
+        links("stdc++fs")
 
         linkoptions { obj:getLinkOptions() }
         defines { obj:getPreprocessors() }
