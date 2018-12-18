@@ -123,11 +123,11 @@ function ProjectLoader:process(path)
 
         filter { "system:linux" }
             linkoptions { "-fvisibility=hidden -fvisibility-inlines-hidden"}
+            links("stdc++fs")
 
 		filter {}
 
         links(self:GetDependencies(obj))
-        links("stdc++fs")
 
         linkoptions { obj:getLinkOptions() }
         defines { obj:getPreprocessors() }
