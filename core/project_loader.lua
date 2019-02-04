@@ -95,13 +95,18 @@ function ProjectLoader:process(path)
             kind(obj:getType())
         end
         location("./" .. _ACTION)
+
+        if obj:getType() == "ConsoleApp" then
+            includedirs(includePath)
+        end
+
         objdir "../obj/%{cfg.system}"
         targetdir "../bin/%{cfg.system}"
 
         filter { "kind:*Lib" }
             pchheader(obj:getName().."/pch.hpp")
         filter { "kind:*Lib", "action:vs*" }
-                pchsource(srcPath.."/pch.cpp")
+            pchsource(srcPath.."/pch.cpp")
         filter {}
 
         files {
