@@ -121,7 +121,7 @@ function ProjectLoader:process(path)
 			srcPath.."/**.geom",
         }
 
-        for key,value in pairs(proj:getAdditionalHeaders()) do
+        for key,value in pairs(obj:getAdditionalHeaders()) do
             files {
                 value.."/**.hpp",
                 value.."/**.inl",
@@ -129,7 +129,7 @@ function ProjectLoader:process(path)
             }
         end
 
-        for key,value in pairs(proj:getAdditionalSources()) do
+        for key,value in pairs(obj:getAdditionalSources()) do
             files {
                 value.."/**.cpp",
                 value.."/**.c"
