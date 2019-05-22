@@ -123,16 +123,16 @@ function ProjectLoader:process(path)
 
         for key,value in pairs(obj:getAdditionalHeaders()) do
             files {
-                value.."/**.hpp",
-                value.."/**.inl",
-                value.."/**.h"
+                value..".hpp",
+                value..".inl",
+                value..".h"
             }
         end
 
         for key,value in pairs(obj:getAdditionalSources()) do
             files {
-                value.."/**.cpp",
-                value.."/**.c"
+                value..".cpp",
+                value..".c"
             }
         end
 
