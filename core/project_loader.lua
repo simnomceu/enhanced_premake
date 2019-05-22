@@ -104,11 +104,13 @@ function ProjectLoader:process(path)
         objdir "../obj/%{cfg.system}"
         targetdir "../bin/%{cfg.system}"
 
-        filter { "kind:*Lib" }
-            pchheader(obj:getName().."/pch.hpp")
-        filter { "kind:*Lib", "action:vs*" }
-            pchsource(srcPath.."/pch.cpp")
-        filter {}
+        if obj:isPCHEnabled() then
+            filter { "kind:*Lib" }
+                pchheader(obj:getName().."/pch.hpp")
+            filter { "kind:*Lib", "action:vs*" }
+                pchsource(srcPath.."/pch.cpp")
+            filter {}
+        end
 
         files {
             includePath.."/**.inl",

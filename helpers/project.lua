@@ -34,7 +34,8 @@ function Project:new(obj)
         _linkOptions = PlatformSpecific:new(),
         _preprocessors = PlatformSpecific:new(),
         _additionalSources = {},
-        _additionalHeaders = {}
+        _additionalHeaders = {},
+        _pch = true
     }
     setmetatable(this, Project)
     self.__index = self
@@ -143,4 +144,13 @@ end
 
 function Project:getAdditionalHeaders()
     return self._additionalHeaders
+end
+
+function Project:enablePCH(enabled)
+    assert(type(enabled) == "boolean", "Project:enablePCH expects a boolean parameter.")
+    self._pch = enabled
+end
+
+function Project:isPCHEnabled()
+    return self._pch
 end
