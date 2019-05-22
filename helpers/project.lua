@@ -32,7 +32,9 @@ function Project:new(obj)
         _dependencies = {},
         _extlibs = PlatformSpecific:new(),
         _linkOptions = PlatformSpecific:new(),
-        _preprocessors = PlatformSpecific:new()
+        _preprocessors = PlatformSpecific:new(),
+        _additionalSources = {},
+        _additionalHeaders = {}
     }
     setmetatable(this, Project)
     self.__index = self
@@ -123,4 +125,22 @@ end
 
 function Project:getPreprocessors()
     return self._preprocessors:getAll()
+end
+
+function Project:addAdditionalSources(sources)
+    assert(type(sources) == "table", "Project:addAdditionalSources expects a table parameter.")
+    self._additionalSources = Table.append(self._additionalSources, sources)
+end
+
+function Project:getAdditionalSources()
+    return self._additionalSources
+end
+
+function Project:addAdditionalHeaders(headers)
+    assert(type(headers) == "table", "Project:addAdditionalHeaders expects a table parameter.")
+    self._additionalHeaders = Table.append(self._additionalHeaders, headers)
+end
+
+function Project:getAdditionalHeaders()
+    return self._additionalHeaders
 end

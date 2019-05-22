@@ -98,6 +98,7 @@ function ProjectLoader:process(path)
 
         if obj:getType() == "ConsoleApp" then
             includedirs(includePath)
+            includedirs(obj:getAdditionalHeaders())
         end
 
         objdir "../obj/%{cfg.system}"
@@ -119,6 +120,22 @@ function ProjectLoader:process(path)
 			srcPath.."/**.vert",
 			srcPath.."/**.geom",
         }
+
+        for key,value in pairs(proj:getAdditionalHeaders()) do
+            files {
+                value.."/**.hpp",
+                value.."/**.inl",
+                value.."/**.h"
+            }
+        end
+
+        for key,value in pairs(proj:getAdditionalSources()) do
+            files {
+                value.."/**.cpp",
+                value.."/**.c"
+            }
+        end
+
 		filter { "system:windows", "files:**/cocoa/** or **/x11/**" }
 			flags {"ExcludeFromBuild"}
 		filter { "system:linux", "files:**/cocoa/** or **/win32/**" }
