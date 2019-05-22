@@ -121,20 +121,8 @@ function ProjectLoader:process(path)
 			srcPath.."/**.geom",
         }
 
-        for key,value in pairs(obj:getAdditionalHeaders()) do
-            files {
-                value..".hpp",
-                value..".inl",
-                value..".h"
-            }
-        end
-
-        for key,value in pairs(obj:getAdditionalSources()) do
-            files {
-                value..".cpp",
-                value..".c"
-            }
-        end
+        files (obj:getAdditionalHeaders())
+        files (obj:getAdditionalSources())
 
 		filter { "system:windows", "files:**/cocoa/** or **/x11/**" }
 			flags {"ExcludeFromBuild"}
