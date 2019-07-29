@@ -57,6 +57,7 @@ function ProjectLoader:process(path)
 
     local includePath, srcPath
     local projectName = string.lower(obj:getName())
+    local grp = ""
 
     if obj:getType() == "Lib" then
         includePath = "../include/"..projectName
@@ -64,86 +65,89 @@ function ProjectLoader:process(path)
     elseif obj:getType() == "ConsoleApp" then
         includePath = "../examples/"..projectName
         srcPath = "../examples/"..projectName
+        grp = "samples"
 	else
 		includePath = "../"..projectName
 		srcPath = "../"..projectName
 		obj:setType("ConsoleApp")
     end
 
-    project(obj:getName())
-        if obj:getType() == "Lib" then
-            filter {"configurations:*Static"}
-                kind "StaticLib"
+    group(grp)
+        project(obj:getName())
+            if obj:getType() == "Lib" then
+                filter {"configurations:*Static"}
+                    kind "StaticLib"
 
-            filter {"configurations:*Shared"}
-                kind "SharedLib"
-                defines {"ECE_"..projectName.."_SHARED"}
+                filter {"configurations:*Shared"}
+                    kind "SharedLib"
+                    defines {"ECE_"..projectName.."_SHARED"}
 
-            filter {"configurations:DebugStatic"}
-                targetsuffix("-s-d")
+                filter {"configurations:DebugStatic"}
+                    targetsuffix("-s-d")
 
-            filter {"configurations:DebugShared"}
-                targetsuffix("-d")
+                filter {"configurations:DebugShared"}
+                    targetsuffix("-d")
 
-            filter {"configurations:ReleaseStatic"}
-                targetsuffix("-s")
+                filter {"configurations:ReleaseStatic"}
+                    targetsuffix("-s")
 
-            filter {}
+                filter {}
 
-            pic("On")
-        else
-            kind(obj:getType())
-        end
-        location("./" .. _ACTION)
+                pic("On")
+            else
+                kind(obj:getType())
+            end
+            location("./" .. _ACTION)
 
-        if obj:getType() == "ConsoleApp" then
-            includedirs(includePath)
-            includedirs(obj:getAdditionalHeaders())
-        end
+            if obj:getType() == "ConsoleApp" then
+                includedirs(includePath)
+                includedirs(obj:getAdditionalHeaders())
+            end
 
-        objdir "../obj/%{cfg.system}"
-        targetdir "../bin/%{cfg.system}"
+            objdir "../obj/%{cfg.system}"
+            targetdir "../bin/%{cfg.system}"
 
-        if obj:isPCHEnabled() then
-            filter { "kind:*Lib" }
-                pchheader(obj:getName().."/pch.hpp")
-            filter { "kind:*Lib", "action:vs*" }
-                pchsource(srcPath.."/pch.cpp")
-            filter {}
-        end
+            if obj:isPCHEnabled() then
+                filter { "kind:*Lib" }
+                    pchheader(obj:getName().."/pch.hpp")
+                filter { "kind:*Lib", "action:vs*" }
+                    pchsource(srcPath.."/pch.cpp")
+                filter {}
+            end
 
-        files {
-            includePath.."/**.inl",
-            includePath.."/**.hpp",
-            includePath.."/**.h",
-            srcPath.."/**.cpp",
-            srcPath.."/**.c",
-			srcPath.."/**.frag",
-			srcPath.."/**.vert",
-			srcPath.."/**.geom",
-        }
+            files {
+                includePath.."/**.inl",
+                includePath.."/**.hpp",
+                includePath.."/**.h",
+                srcPath.."/**.cpp",
+                srcPath.."/**.c",
+    			srcPath.."/**.frag",
+    			srcPath.."/**.vert",
+    			srcPath.."/**.geom",
+            }
 
-        files (obj:getAdditionalHeaders())
-        files (obj:getAdditionalSources())
+            files (obj:getAdditionalHeaders())
+            files (obj:getAdditionalSources())
 
-		filter { "system:windows", "files:**/cocoa/** or **/x11/**" }
-			flags {"ExcludeFromBuild"}
-		filter { "system:linux", "files:**/cocoa/** or **/win32/**" }
-			flags {"ExcludeFromBuild"}
-		filter { "system:macosx", "files:**/x11/** or **/win32/**" }
-			flags {"ExcludeFromBuild"}
+    		filter { "system:windows", "files:**/cocoa/** or **/x11/**" }
+    			flags {"ExcludeFromBuild"}
+    		filter { "system:linux", "files:**/cocoa/** or **/win32/**" }
+    			flags {"ExcludeFromBuild"}
+    		filter { "system:macosx", "files:**/x11/** or **/win32/**" }
+    			flags {"ExcludeFromBuild"}
 
-        filter { "system:linux" }
-            linkoptions { "-fvisibility=hidden -fvisibility-inlines-hidden"}
-            links("stdc++fs")
+            filter { "system:linux" }
+                linkoptions { "-fvisibility=hidden -fvisibility-inlines-hidden"}
+                links("stdc++fs")
 
-		filter {}
+    		filter {}
 
-        links(self:GetDependencies(obj))
+            links(self:GetDependencies(obj))
 
-        linkoptions { obj:getLinkOptions() }
-        defines { obj:getPreprocessors() }
-        defines { "ECE_"..projectName.."_BUILD"}
+            linkoptions { obj:getLinkOptions() }
+            defines { obj:getPreprocessors() }
+            defines { "ECE_"..projectName.."_BUILD"}
+    group("")
 end
 
 function ProjectLoader:GetDependencies(proj)
