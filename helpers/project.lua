@@ -35,7 +35,8 @@ function Project:new(obj)
         _preprocessors = PlatformSpecific:new(),
         _additionalSources = {},
         _additionalHeaders = {},
-        _pch = true
+        _pch = true,
+		_group = ""
     }
     setmetatable(this, Project)
     self.__index = self
@@ -153,4 +154,13 @@ end
 
 function Project:isPCHEnabled()
     return self._pch
+end
+
+function Project:setGroup(group)
+    assert(type(group) == "string", "Project:setGroup expects a string parameter.")
+    self._group = group
+end
+
+function Project:getGroup()
+    return self._group
 end

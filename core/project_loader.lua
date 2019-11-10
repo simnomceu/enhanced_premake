@@ -71,6 +71,10 @@ function ProjectLoader:process(path)
 		srcPath = "../"..projectName
 		obj:setType("ConsoleApp")
     end
+	
+	if grp == "" then
+		grp = obj:getGroup()
+	end
 
     group(grp)
         project(obj:getName())
